@@ -76,6 +76,13 @@ module.exports = function (grunt) {
         cwd: 'test/fixtures',
         src: ['*.js', '*.css'],
         dest: 'test/tmp/withSourceMaps'
+      },
+      usingQueryParams: {
+        options: {
+          useQueryString: true
+        },
+        src: ['test/fixtures/not-modified.png'],
+        dest: 'test/tmp/dest'
       }
     },
     simplemocha: {
