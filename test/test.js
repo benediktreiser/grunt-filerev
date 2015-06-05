@@ -12,7 +12,8 @@ var hashes = {
   'test/fixtures/styles.css.map' : 'test/tmp/withSourceMaps/styles.a6aa2292.css.map',
   'test/fixtures/more-styles.css' : 'test/tmp/withSourceMaps/more-styles.dce8e0e5.css',
   'test/fixtures/inline.js' : 'test/tmp/withSourceMaps/inline.8b435ef2.js',
-  'test/fixtures/another.png' : 'test/tmp/another-processed-92279d3f.png'
+  'test/fixtures/another.png' : 'test/tmp/another-processed-92279d3f.png',
+  'test/fixtures/not-modified.png' : 'test/tmp/not-modified.png'
 };
 
 it('should revision files based on content', function () {
@@ -94,6 +95,13 @@ it('should ignore inline base64-encoded sourcemaps', function () {
 
 it('should allow a filename processing function', function () {
   var file = 'test/fixtures/another.png';
+  var original = fs.statSync(file).size;
+  var revisioned = fs.statSync(hashes[file]).size;
+  assert(revisioned === original);
+});
+
+it('should not rename files with the useQueryParam option', function () {
+  var file = 'test/fixtures/not-modified.png';
   var original = fs.statSync(file).size;
   var revisioned = fs.statSync(hashes[file]).size;
   assert(revisioned === original);
