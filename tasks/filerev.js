@@ -12,7 +12,8 @@ module.exports = function (grunt) {
     var filerev = grunt.filerev || {summary: {}};
     var options = this.options({
       algorithm: 'md5',
-      length: 8
+      length: 8,
+      useQueryString: false
     });
 
     eachAsync(this.files, function (el, i, next) {
@@ -50,14 +51,19 @@ module.exports = function (grunt) {
         var ext = path.extname(file);
         var newName;
 
-        if (typeof options.process === 'function') {
-          newName = options.process(path.basename(file, ext), suffix, ext.slice(1));
-        } else {
-          if (options.process) {
-            grunt.log.error('options.process must be a function; ignoring');
-          }
+        if (!options.useQueryString) {
+          if (typeof options.process === 'function') {
+            newName = options.process(path.basename(file, ext), suffix, ext.slice(1));
+          } else {
+            if (options.process) {
+              grunt.log.error('options.process must be a function; ignoring');
+            }
 
-          newName = [path.basename(file, ext), suffix, ext.slice(1)].join('.');
+            newName = [path.basename(file, ext), suffix, ext.slice(1)].join('.');
+          }
+        } else {
+          // no renaming but the hash can be used to bust caches by appending it as a query parameter
+          newName = [path.basename(file, ext), ext.slice(1)].join('.');
         }
 
         var resultPath;
@@ -102,6 +108,11 @@ module.exports = function (grunt) {
         }
 
         filerev.summary[path.normalize(file)] = path.join(dirname, newName);
+        // if using the useQueryString method, append the queryString
+        if (options.useQueryString) {
+          filerev.summary[path.normalize(file)] += '?rev=' + suffix;
+          console.log(filerev.summary);
+        }
         grunt.verbose.writeln(chalk.green('✔ ') + file + chalk.gray(' changed to ') + newName);
 
         if (sourceMap) {
