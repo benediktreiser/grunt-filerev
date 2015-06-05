@@ -111,7 +111,6 @@ module.exports = function (grunt) {
         // if using the useQueryParam method, append the queryString
         if (options.useQueryParam) {
           filerev.summary[path.normalize(file)] += '?rev=' + suffix;
-          console.log(filerev.summary);
         }
         grunt.verbose.writeln(chalk.green('✔ ') + file + chalk.gray(' changed to ') + newName);
 
