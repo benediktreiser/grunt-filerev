@@ -13,7 +13,7 @@ module.exports = function (grunt) {
     var options = this.options({
       algorithm: 'md5',
       length: 8,
-      useQueryString: false
+      useQueryParam: false
     });
 
     eachAsync(this.files, function (el, i, next) {
@@ -51,7 +51,7 @@ module.exports = function (grunt) {
         var ext = path.extname(file);
         var newName;
 
-        if (!options.useQueryString) {
+        if (!options.useQueryParam) {
           if (typeof options.process === 'function') {
             newName = options.process(path.basename(file, ext), suffix, ext.slice(1));
           } else {
@@ -108,8 +108,8 @@ module.exports = function (grunt) {
         }
 
         filerev.summary[path.normalize(file)] = path.join(dirname, newName);
-        // if using the useQueryString method, append the queryString
-        if (options.useQueryString) {
+        // if using the useQueryParam method, append the queryString
+        if (options.useQueryParam) {
           filerev.summary[path.normalize(file)] += '?rev=' + suffix;
           console.log(filerev.summary);
         }

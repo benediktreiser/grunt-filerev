@@ -79,7 +79,7 @@ module.exports = function (grunt) {
       },
       usingQueryParams: {
         options: {
-          useQueryString: true
+          useQueryParam: true
         },
         src: ['test/fixtures/not-modified.png'],
         dest: 'test/tmp/dest'
